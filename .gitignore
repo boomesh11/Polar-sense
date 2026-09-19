@@ -49,3 +49,6 @@ Makefile
 # Telemetry databases
 polarsense_dev.db
 polarsense_telemetry.db
+
+# Internal prompt instructions
+PolarSense_Dashboard_Prompt*.md
