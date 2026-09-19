@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 680" width="100%" height="100%">
+  <defs>
+    <style>
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-weight: 700; font-size: 20px; fill: #1A2733; }
+      .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; fill: #5A6B78; }
+      .box-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-weight: 600; font-size: 14px; fill: #0E7C8B; }
+      .text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 12px; fill: #1A2733; }
+      .text-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 11px; fill: #5A6B78; }
+      .text-code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 11px; fill: #1A2733; }
+      .panel { fill: #FFFFFF; stroke: #E4E7EA; stroke-width: 1.5; rx: 6px; }
+      .panel-accent { fill: #F4F9FA; stroke: #0E7C8B; stroke-width: 1.5; rx: 6px; }
+      .arrow { stroke: #0E7C8B; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .arrow-dashed { stroke: #5A6B78; stroke-width: 1.5; stroke-dasharray: 4 4; fill: none; marker-end: url(#arrowhead-gray); }
+    </style>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#0E7C8B" />
+    </marker>
+    <marker id="arrowhead-gray" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#5A6B78" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#FBFAF8" />
+
+  <!-- Header -->
+  <text x="40" y="45" class="title">PolarSense System Architecture &amp; Data Pipeline</text>
+  <text x="40" y="68" class="subtitle">Smart India Hackathon 2026 · Problem Statement 26065 · Team AQUA LEAGUE (TRL 4)</text>
+
+  <!-- 1. Float Segment -->
+  <rect x="40" y="95" width="310" height="545" class="panel" />
+  <rect x="40" y="95" width="310" height="36" fill="#F8FAFC" stroke="#E4E7EA" stroke-width="1.5" rx="6 6 0 0" />
+  <text x="56" y="118" class="box-title">1. AUTONOMOUS PROFILING FLOAT</text>
+
+  <!-- Float Subsystems -->
+  <rect x="56" y="145" width="278" height="80" class="panel" />
+  <text x="68" y="167" class="text" font-weight="600">Flight Controller &amp; Supervisor</text>
+  <text x="68" y="187" class="text-sub">• STM32L4 ARM Cortex-M4 (58 µA idle)</text>
+  <text x="68" y="205" class="text-sub">• TPL5010 Watchdog (35 nA) + 2x64MB NOR Flash</text>
+
+  <rect x="56" y="235" width="278" height="95" class="panel" />
+  <text x="68" y="257" class="text" font-weight="600">Dual Ice Sensing Suite</text>
+  <text x="68" y="277" class="text-sub">• 200 kHz Acoustic Sonar (2-60m &amp; 0.05-5m)</text>
+  <text x="68" y="295" class="text-sub">• RBRlegato4 CTD (1 Hz profile sampling)</text>
+  <text x="68" y="313" class="text-sub">• Surface Pod: BMP390 Baro + TMP117 Air Temp</text>
+
+  <rect x="56" y="340" width="278" height="80" class="panel" />
+  <text x="68" y="362" class="text" font-weight="600">Buoyancy Engine &amp; Energy</text>
+  <text x="68" y="382" class="text-sub">• 650 ml Hydraulic Bladder + Latching Valve</text>
+  <text x="68" y="400" class="text-sub">• 24-Cell 3S8P Li-SOCl2 (10.8V, 104Ah, 919Wh)</text>
+
+  <rect x="56" y="430" width="278" height="90" class="panel-accent" />
+  <text x="68" y="452" class="box-title">Deterministic Ice Decision Engine</text>
+  <text x="68" y="472" class="text-code">IF (Sonar &gt; 60m AND SST &gt; 1.5°C) → SURFACE</text>
+  <text x="68" y="490" class="text-code">ELSE IF (Unclear/No Echo) → UNKNOWN (Abort)</text>
+  <text x="68" y="508" class="text-code">ELSE (Ice &lt; 5m) → 3 Aborts → 30d Backoff</text>
+
+  <rect x="56" y="530" width="278" height="90" class="panel" />
+  <text x="68" y="552" class="text" font-weight="600">Satellite Communications</text>
+  <text x="68" y="572" class="text-sub">• Iridium 9603N SBD Transceiver</text>
+  <text x="68" y="590" class="text-sub">• 340-byte Binary Frames + CRC-32 + HMAC-SHA256</text>
+  <text x="68" y="608" class="text-sub">• Deletion only upon satellite delivery confirmation</text>
+
+  <!-- Arrow from Float to Iridium -->
+  <path d="M 350 575 L 395 575 L 395 320 L 415 320" class="arrow" />
+  <text x="360" y="310" class="text-sub">340B Frame</text>
+
+  <!-- 2. Satellite Segment -->
+  <rect x="425" y="270" width="180" height="100" class="panel" />
+  <text x="440" y="295" class="box-title">IRIDIUM SBD LINK</text>
+  <text x="440" y="320" class="text">9603N Short Burst</text>
+  <text x="440" y="338" class="text-sub">• Global Polar Coverage</text>
+  <text x="440" y="354" class="text-sub">• L-band 1616–1626.5 MHz</text>
+
+  <!-- Arrow from Iridium to Ground -->
+  <path d="M 605 320 L 675 320" class="arrow" />
+  <text x="615" y="310" class="text-sub">DirectIP</text>
+
+  <!-- 3. Ground Ingest Service -->
+  <rect x="685" y="95" width="375" height="265" class="panel" />
+  <rect x="685" y="95" width="375" height="36" fill="#F8FAFC" stroke="#E4E7EA" stroke-width="1.5" rx="6 6 0 0" />
+  <text x="705" y="118" class="box-title">2. GROUND INGEST SERVICE (FastAPI)</text>
+
+  <rect x="705" y="145" width="335" height="60" class="panel" />
+  <text x="717" y="167" class="text" font-weight="600">Integrity &amp; De-duplication</text>
+  <text x="717" y="187" class="text-sub">• CRC-32 Checksum + 96-bit HMAC-SHA256 Auth</text>
+
+  <rect x="705" y="215" width="335" height="60" class="panel" />
+  <text x="717" y="237" class="text" font-weight="600">Argo RTQC Automated Engine</text>
+  <text x="717" y="257" class="text-sub">• Real-time Quality Control: Flags 1 (Good) to 4 (Bad)</text>
+
+  <rect x="705" y="285" width="335" height="60" class="panel" />
+  <text x="717" y="307" class="text" font-weight="600">Storage &amp; Data Pipeline</text>
+  <text x="717" y="327" class="text-sub">• TimescaleDB Hypertable / SQLite dev fallback</text>
+
+  <!-- Arrow from Ingest to NetCDF & Dashboard -->
+  <path d="M 872 360 L 872 400" class="arrow" />
+
+  <!-- 4. Downstream / Dashboard Segment -->
+  <rect x="685" y="405" width="375" height="235" class="panel" />
+  <rect x="685" y="405" width="375" height="36" fill="#F8FAFC" stroke="#E4E7EA" stroke-width="1.5" rx="6 6 0 0" />
+  <text x="705" y="428" class="box-title">3. OPERATIONS DASHBOARD &amp; SCIENTIFIC EXPORT</text>
+
+  <rect x="705" y="455" width="335" height="75" class="panel" />
+  <text x="717" y="477" class="text" font-weight="600">React + Leaflet Operations Ground Station</text>
+  <text x="717" y="497" class="text-sub">• Fleet Map with under-ice dead reckoning trajectories</text>
+  <text x="717" y="515" class="text-sub">• Float Explorer: Overview, T-S scatter, RTQC inspection</text>
+
+  <rect x="705" y="540" width="335" height="85" class="panel" />
+  <text x="717" y="562" class="text" font-weight="600">Argo-Format NetCDF Export</text>
+  <text x="717" y="582" class="text-sub">• CF/Argo 3.1 PROF/TRAJ/TECH/META compliance</text>
+  <text x="717" y="600" class="text-sub">• Instant download via NetCDF, CSV, and REST API</text>
+</svg>
