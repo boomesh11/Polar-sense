@@ -1,292 +1,117 @@
-﻿# 🧊 PolarSense Ground Station
+# PolarSense: Ice-Aware Autonomous Profiling Float
 
-[![SIH 2026](https://img.shields.io/badge/SIH%202026-PS%2026065-f97316?style=for-the-badge)](https://github.com/boomesh11/Polar-sense)
-[![MoES](https://img.shields.io/badge/Ministry-Earth%20Sciences-10b981?style=for-the-badge)](#)
-[![Team](https://img.shields.io/badge/Team-AQUA%20LEAGUE-6366f1?style=for-the-badge)](#)
-[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react)](#)
-[![Vite](https://img.shields.io/badge/Vite-6.4-646CFF?style=for-the-badge&logo=vite)](#)
-[![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](./LICENSE)
+[![CI Pipeline](https://github.com/boomesh11/Polar-sense/actions/workflows/ci.yml/badge.svg)](https://github.com/boomesh11/Polar-sense/actions/workflows/ci.yml)
+[![SIH 2026](https://img.shields.io/badge/SIH%202026-PS%2026065-f97316?style=flat-square)](https://www.sih.gov.in/)
+[![Team](https://img.shields.io/badge/Team-AQUA%20LEAGUE-6366f1?style=flat-square)](#)
+[![TRL](https://img.shields.io/badge/TRL-4%20(Benchtop%20Validated)-blue?style=flat-square)](#)
+[![License](https://img.shields.io/badge/License-MIT-22c55e?style=flat-square)](./LICENSE)
 
-**Real-time Web Ground Station for PolarSense Autonomous Polar Ice-Aware Profiling Float**
-
-*Smart India Hackathon 2026 · Problem Statement 26065 · Ministry of Earth Sciences / NCPOR*
+> **"Every polar float today infers ice from temperature; PolarSense measures it."**
 
 ---
 
-## Overview
+### The Problem
 
-PolarSense is an autonomous **Argo-compatible profiling float** purpose-built for polar ocean monitoring beneath sea-ice. The float performs 10-day park-and-profile cycles in the Southern Ocean and Arctic, transmitting 340-byte Iridium SBD messages to this ground station in near-real-time.
-
-This web application — the **PolarSense Ground Station** — provides mission operators at NCPOR/MoES with:
-
-| Feature | Description |
-|---|---|
-| 🗺️ **Fleet Map** | Live Leaflet map of all floats with status overlays, bbox region selection, and filter rail |
-| 🔬 **Float Detail** | Per-float 7-tab detail panel: Overview, Trajectory, T-S diagram, Profile trends, Overlay, Raw telemetry, QC |
-| 📊 **Profile Explorer** | Multi-float comparison in depth or sigma-theta (isopycnal) mode |
-| 📤 **Export** | NetCDF-ASCII, CSV, JSON export with MoES/NCPOR institutional metadata |
-| 📡 **Network** | Iridium SBD link health, uplink history, satellite-arc simulation |
-| 🔌 **API** | Live REST-style endpoint explorer for downstream integration |
+1. Conventional polar profiling floats infer surface sea-ice solely from water temperature thresholds, causing severe false positives in cold open water and catastrophic collisions beneath newly forming ice.
+2. An under-ice collision crushes satellite antennas and shears GNSS receivers, permanently terminating the instrument and losing months of irreplaceable sub-surface polar ocean observations.
+3. India currently lacks domestic manufacturing capability for polar-capable profiling floats, relying on imported instruments costing **Rs 22 Lakh** per unit.
 
 ---
 
-## Getting Started
+### System Architecture
 
-### Prerequisites
+![PolarSense Architecture](docs/architecture.svg)
 
-- **Node.js** >= 18.0
-- **npm** >= 9.0
+---
 
-### Local Development
+### Component Status Table
 
+| Subsystem / Component | Status Tag | Evidence & Verification |
+|---|---|---|
+| **Mission State Machine (7 States)** | `SIMULATED` | Host C build & execution ([`firmware/host/main_host.c`](firmware/host/main_host.c)) |
+| **Ice Decision & Backoff Rules** | `MEASURED` | Automated unit tests passing ([`firmware/tests/test_ice_logic.c`](firmware/tests/test_ice_logic.c)) |
+| **Telemetry Ingest & CRC/HMAC Pipeline** | `SIMULATED` | FastAPI service & round-trip pytest suite ([`ground/tests/test_round_trip.py`](ground/tests/test_round_trip.py)) |
+| **Argo Real-Time QC (Flags 1–4)** | `SIMULATED` | Argo RTQC compliance suite ([`ground/ingest/qc.py`](ground/ingest/qc.py)) |
+| **PostgreSQL / TimescaleDB Schema** | `TARGET` | Production hypertable schema definition ([`ground/db/schema.sql`](ground/db/schema.sql)) |
+| **Argo NetCDF Exporter (PROF/TRAJ)** | `TARGET` | CF-compliant netCDF4 exporter ([`ground/ingest/netcdf_export.py`](ground/ingest/netcdf_export.py)) |
+| **Operations Ground Station Dashboard** | `SIMULATED` | Multi-page React + Leaflet app running on **SYNTHETIC** data ([`src/`](src/)) |
+| **Buoyancy Engine & Displacement** | `CALCULATED` | Hydrostatic displacement scripts ([`simulation/physics.py`](simulation/physics.py)) |
+| **Power Budget & Mission Endurance** | `CALCULATED` | 919 Wh / 5.30 Wh per-cycle physics model ([`simulation/physics.py`](simulation/physics.py)) |
+| **Hull Stress & Elastic Buckling** | `CALCULATED` | Analytical Lamé & von Mises closed-form formulas ([`hardware/hull_calcs.md`](hardware/hull_calcs.md)) |
+| **Bill of Materials & Unit Economics** | `TARGET` | Detailed dual-estimate CSV allowance ([`hardware/bom.csv`](hardware/bom.csv)) |
+
+---
+
+### Key Design Figures
+
+*All figures are locked to the PolarSense baseline and verified against [`simulation/check_deck_numbers.py`](simulation/check_deck_numbers.py).*
+
+| Parameter | Specification | Status Tag |
+|---|---|---|
+| **Hull Dimensions** | 1300 mm length, 160 mm outer diameter, 6061-T6 aluminium | `TARGET` |
+| **Depth Rating & Neutral Mass** | Rated 500 m, parks at 450 m, 25.75 kg neutral mass | `TARGET` |
+| **Mission Cycle** | 10-day park-and-profile cycle; CTD profiles collected during ascent | `TARGET` |
+| **Buoyancy Engine** | 650 ml hydraulic oil engine with zero-power latching solenoid valve | `TARGET` |
+| **Net Buoyancy Lift** | 0.6676 kg net positive lift from 650 ml displacement in 1.027 kg/L seawater | `CALCULATED` |
+| **Primary Battery Pack** | 24 Li-SOCl2 D cells in 3S8P arrangement (10.8 V nominal, 104 Ah capacity) | `TARGET` |
+| **Available Energy Budget** | 919 Wh usable energy; 5.30 Wh consumed per 10-day cycle | `TARGET` |
+| **Mission Endurance** | 173 cycles (~4.7 years in open water, 3.95 years under severe ice) | `CALCULATED` |
+| **Claimed Operational Life** | 3.5 years (approximately 128 full scientific vertical profiles) | `TARGET` |
+| **Electronics Platform** | STM32L4 flight computer, TPL5010 watchdog (35 nA), 58 µA idle current | `TARGET` |
+| **Solid-State Storage** | 2 × 64 MiB NOR flash configured as a non-volatile ring buffer | `TARGET` |
+| **Oceanographic Sensors** | RBRlegato4-class CTD sampling at 1 Hz; 200 kHz dual-range upward sonar | `TARGET` |
+| **Surface Pod Instrumentation** | BMP390 precision barometer and TMP117 air temperature sensor | `TARGET` |
+| **Navigation & Safety** | ISM330DHCX IMU, u-blox NEO-M9N GNSS, internal conductive leak probe | `TARGET` |
+| **Satellite Telemetry** | Iridium 9603N SBD sending 340-byte binary frames (CRC-32 & HMAC-SHA-256) | `TARGET` |
+| **Flash Retention Policy** | Profiles deleted from on-board flash only after satellite delivery confirmation | `TARGET` |
+| **Ice Decision Engine** | Surface ONLY when BOTH sonar (>60m) and SST (>1.5°C) clear; any echo ambiguity counts as `UNKNOWN` causing immediate abort; 3 blocked attempts trigger a 30-day dormant backoff | `TARGET` |
+| **Unit Economics** | Rs 8.25 Lakh target per unit; Rs 8.25–16.5 Lakh projected band (vs Rs 22 Lakh imported float). *Funding allowances, not supplier quotations.* | `TARGET` |
+
+---
+
+### What is NOT Claimed
+
+- **TRL Level**: The project is strictly at **Technology Readiness Level 4 (TRL 4)** (laboratory benchtop integration and physics simulation).
+- **Environmental Qualification**: No hydrostatic pressure qualification at 500 m, no sub-zero cold-chamber testing, and no ocean field qualification has been performed.
+- **Ice Validation**: The 200 kHz acoustic echo sounder has not been validated against real multi-year sea-ice floes.
+- **Argo Core Scope**: PolarSense is designed for 500 m seasonal sea-ice profiling and is **not** a replacement for standard 2000 m deep-ocean Argo floats.
+- **Hardware Photography**: No physical field photos are presented; all telemetry dashboards operate on **SYNTHETIC** sample datasets.
+
+---
+
+### Quick Start & Verification
+
+#### 1. Verify Design Deck Figures
 ```bash
-# Clone the repo
-git clone https://github.com/boomesh11/Polar-sense.git
-cd Polar-sense
+python simulation/check_deck_numbers.py
+```
 
-# Install dependencies
+#### 2. Run Firmware Host Simulation & Unit Tests
+```bash
+cd firmware
+mkdir build && cd build
+cmake ..
+cmake --build .
+./test_runner
+```
+
+#### 3. Run Ground Service & Round-Trip Telemetry Tests
+```bash
+pip install -r ground/requirements.txt
+pytest ground/tests/ -v
+```
+
+#### 4. Launch Operations Ground Station Dashboard
+```bash
 npm install
-
-# Start dev server (hot-reload on http://localhost:5173)
 npm run dev
-```
-
-### Production Build
-
-```bash
-npm run build
-# Output: dist/ (~897 kB JS bundle, tree-shaken)
-
-# Preview production build locally
-npm run preview
+# Dashboard available at http://localhost:5173 (runs on SYNTHETIC data)
 ```
 
 ---
 
-## Project Structure
+### Team & Acknowledgements
 
-```
-POLAR SENSE/
-├── index.html                       # Vite entry point
-├── vite.config.js                   # Vite configuration
-├── package.json
-├── src/
-│   ├── main.jsx                     # Root: mounts FleetProvider + BrowserRouter
-│   ├── App.jsx                      # Route definitions
-│   ├── index.css                    # Global styles + Tailwind
-│   ├── context/
-│   │   └── FleetContext.jsx         # Global simulation state (15 s tick)
-│   ├── components/
-│   │   ├── TopBar.jsx               # Navigation + Spec v3.0 modal trigger
-│   │   ├── FloatSidePanel.jsx       # Slide-in panel for fleet map selection
-│   │   ├── SpecModal.jsx            # Interactive 6-tab v3.0 spec viewer
-│   │   ├── FleetSummaryCards.jsx    # KPI cards (active / under-ice / silent)
-│   │   ├── StatusPill.jsx           # Colour-coded mission state badge
-│   │   ├── QCBadge.jsx              # Argo QC flag badge (0-4)
-│   │   └── Sparkline.jsx            # Mini trend chart
-│   ├── data/
-│   │   ├── fleet.json               # Simulated fleet of 6 floats
-│   │   ├── regionFromCoords.js      # Lat/lon -> region classifier
-│   │   └── oceanography.js          # NetCDF-ASCII generator
-│   └── pages/
-│       ├── Fleet/
-│       │   ├── FleetPage.jsx        # Main map + bbox draw + filter rail
-│       │   └── FleetFilterRail.jsx
-│       ├── Float/
-│       │   ├── FloatPage.jsx        # Float detail shell (7 tabs)
-│       │   ├── TabOverview.jsx      # Health strip + battery + ice state
-│       │   ├── TabTrajectory.jsx    # Leaflet trajectory + uncertainty ring
-│       │   ├── TabTSDiagram.jsx     # T-S diagram (Recharts scatter)
-│       │   ├── TabProfileTrend.jsx  # Time-series of surface T and S
-│       │   ├── TabOverlay.jsx       # Bathymetry overlay
-│       │   └── TabRaw.jsx           # 340-byte SBD frame visualiser
-│       ├── Profiles/ProfilesPage.jsx    # Multi-float profile comparison
-│       ├── Export/ExportPage.jsx
-│       ├── Network/NetworkPage.jsx
-│       └── Api/ApiPage.jsx
-```
-
----
-
-## v3.0 Controlled Baseline
-
-> Engineering parameters locked for SIH 2026 submission. All values traceable to
-> internal PolarSense Design Document v3.0 (sections 07-35).
-
-### Section 07 — Mass & Geometry Budget
-
-| Parameter | Value | Notes |
-|---|---|---|
-| Total float mass | 14.50 kg | Titanium pressure housing |
-| Displaced volume | 14.13 L | At surface |
-| Net buoyancy (surface) | -0.37 kg | Slightly negative — pump required |
-| Buoyancy stroke | **650 ml** | Hydraulic oil displacement |
-| Pressure rating | 2000 dbar | Full Southern Ocean depth |
-| Housing OD | 130 mm | Standard Argo form factor |
-| Housing length | 910 mm | Incl. antennas |
-
-### Sections 09-11 — Hydraulic & Buoyancy System
-
-| Parameter | Value |
-|---|---|
-| Hydraulic pump type | Brushless DC gear pump |
-| Oil reservoir | 750 ml bladder (external) |
-| Descent rate | ~10 cm/s (passive sink) |
-| Ascent rate | ~10 cm/s (pump-driven) |
-| Normal park depth | **450 m** |
-| Profile bottom depth | **520 dbar** |
-| Profile ascent sampling | 2 dbar bins |
-
-### Sections 15-16 — 3-State Ice-Risk Decision Engine
-
-The float implements a deterministic 3-state ice classifier before every surface attempt:
-
-```
-            ICE-RISK DECISION ENGINE
-            ─────────────────────────────────
-            CLEAR         UNKNOWN       BLOCKED
-         (surface OK)  (abort+repark)  (abort+park)
-            │              │               │
-       SST > 1.5 C    SST in [-2,1.5]  SST < -2 C
-       AND acoustic   OR no acoustic   OR acoustic
-       > 250m clear   OR ambiguous      < 50m clear
-```
-
-| State | Action | Telemetry Flag |
-|---|---|---|
-| `CLEAR` | Surface, transmit, GPS fix | `ice_state = 0` |
-| `UNKNOWN` | Abort to 450 m, re-park 10 days | `ice_state = 1` |
-| `BLOCKED` | Abort to 450 m, park until next window | `ice_state = 2` |
-
-**Error metrics (Section 16.3):**
-- Under-ice repositioning uncertainty: ±2.0 km (dead reckoning, no GPS)
-- Max ice-abort count before recovery flag: 4 consecutive aborts
-
-### Sections 19-20 — Power Architecture
-
-| Parameter | Value |
-|---|---|
-| Cell chemistry | Li-SOCl2 (Lithium Thionyl Chloride) |
-| Pack configuration | **24-cell 3S8P** |
-| Nominal pack voltage | 10.8 V |
-| Pack capacity | **1123 Wh** |
-| Per-cycle energy | **5.30 Wh/cycle** (10-day profile) |
-| Design endurance | **3.5 years / ~127 profiles** |
-| Pump power draw | 8.2 W peak |
-| CTD + sensors idle | 0.55 W |
-| Iridium SBD burst | 2.1 W peak, 47 s burst |
-
-### Section 23 — Iridium SBD 340-Byte Frame
-
-```
- Offset   Size   Field
- ------   ----   -----------------------------------------------
-  0x00     2 B   Magic: 0xA7F3
-  0x02     1 B   Frame version (currently 0x03)
-  0x03     1 B   Float ID (1-255)
-  0x04     4 B   Mission cycle number (uint32, big-endian)
-  0x08     4 B   Unix timestamp (uint32)
-  0x0C     2 B   Flags (ice_state[2], qc_ok, gps_fix, ...)
-  0x0E     6 B   GPS fix: lat/lon (3B each, 0.0001 deg LSB)
-  0x14     4 B   [reserved]
-  --- Header: 24 B -------------------------------------------
-  0x18   300 B   Payload: 60x profile sample (5 B each)
-                   depth   : uint16 (0.5 dbar LSB)
-                   temp    : int16  (0.001 C LSB)
-                   salinity: uint16 (0.001 PSU LSB)
-  --- Payload: 300 B -----------------------------------------
-  0x144    4 B   CRC-32 (IEEE 802.3 polynomial)
-  --- CRC: 4 B -----------------------------------------------
-  0x148   12 B   HMAC-SHA256 (truncated to 96 bits)
-  --- HMAC: 12 B ---------------------------------------------
-            340 B TOTAL
-```
-
-### Section 35 — Sensor Suite
-
-| Sensor | Parameter | Range | Accuracy |
-|---|---|---|---|
-| SBE 41CP CTD | Temperature | -2 to 35 C | ±0.002 C |
-| SBE 41CP CTD | Salinity | 0-42 PSU | ±0.002 PSU |
-| SBE 41CP CTD | Pressure | 0-2000 dbar | ±2 dbar |
-| Nortek AquaDopp 1 MHz | Ice proximity | 0-50 m | ±0.5 m |
-| Keller 1 MHz upward | Ice thickness | 2-150 m | ±0.5 m |
-| Sensirion SHT45 | Humidity (housing) | 0-100 %RH | ±1.5 %RH |
-| u-blox ZED-F9P | GPS | — | ±0.01 m CEP |
-| Iridium 9603N | SBD modem | — | 340 B/burst |
-
----
-
-## Dashboard Pages
-
-### Fleet Map (`/fleet`)
-- Interactive Leaflet map centred on polar regions
-- Click-drag **bounding box selection** to filter floats by region
-- Filter rail: status checkboxes + region dropdown (`Arctic`, `Southern Ocean`, `Coastal trials`)
-- Float markers colour-coded by mission state
-- Side panel shows: float identity, last uplink, battery %, ice state, recent profiles
-
-### Float Detail (`/float/:id`)
-Seven tabs per float:
-
-| Tab | Description |
-|---|---|
-| **Overview** | Health strip (6 cards), battery arc gauge (24-cell Wh), ice 3-state engine, uplink history |
-| **Trajectory** | Leaflet path with under-ice uncertainty rings (±2 km), park depth markers |
-| **T-S Diagram** | Recharts scatter of all profiles on temperature-salinity space |
-| **Profile Trend** | Time-series of surface temperature and salinity across profiles |
-| **Overlay** | ETOPO1 bathymetric overlay |
-| **Raw** | 340-byte SBD frame visualiser + hex dump + decoded fields |
-| **QC** | Argo RTQC flag table per profile |
-
-### Profile Explorer (`/profiles`)
-- Select up to 3 floats for side-by-side comparison
-- **Depth mode**: 0-520 dbar pressure axis
-- **Density mode**: sigma-theta isopycnal axis (25.0-28.5 kg/m3) — toggleable
-
-### Export (`/export`)
-Downloads in three formats:
-- **NetCDF-ASCII** — with full MoES/NCPOR institutional metadata + SIH PS 26065 reference
-- **CSV** — flat profile table
-- **JSON** — structured mission data
-
-### Network (`/network`)
-- Per-float Iridium SBD uplink history
-- Satellite arc simulation (Iridium NEXT constellation)
-- Uplink success/failure rate gauge
-
-### API (`/api`)
-Live REST endpoint explorer — query floats, profiles, and telemetry frames.
-
----
-
-## Technology Stack
-
-| Layer | Library / Tool |
-|---|---|
-| Frontend framework | React 18 |
-| Build tool | Vite 6.4.3 |
-| Routing | React Router v6 |
-| Map | Leaflet 1.9 + react-leaflet |
-| Charts | Recharts |
-| Styling | Tailwind CSS |
-| Icons | Lucide React |
-
----
-
-## Team AQUA LEAGUE
-
-> **Smart India Hackathon 2026 — Problem Statement 26065**
-> Ministry of Earth Sciences (MoES) / National Centre for Polar and Ocean Research (NCPOR)
-
-Designing the next generation of autonomous ice-capable ocean profiling infrastructure for India's polar research programme.
-
----
-
-## License
-
-MIT License — see [LICENSE](./LICENSE) for details.
-
----
-
-*Built for SIH 2026 · PS 26065 · MoES/NCPOR · Team AQUA LEAGUE*
+**Team AQUA LEAGUE**  
+**Smart India Hackathon 2026** · **Problem Statement 26065**  
+*Ministry of Earth Sciences (MoES) / National Centre for Polar and Ocean Research (NCPOR)*

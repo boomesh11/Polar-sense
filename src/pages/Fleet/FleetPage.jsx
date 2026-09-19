@@ -49,21 +49,15 @@ export default function FleetPage() {
 
   const [selectedFloat, setSelectedFloat] = useState(null);
   const [isDrawingBBox, setIsDrawingBBox] = useState(false);
-  const isDrawingBBoxRef = useRef(isDrawingBBox);
-
-  // Sync ref and configure map dragging / cursor
-  useEffect(() => {
-    isDrawingBBoxRef.current = isDrawingBBox;
-    if (mapInstanceRef.current) {
-      if (isDrawingBBox) {
-        mapInstanceRef.current.dragging.disable();
-        if (mapContainerRef.current) mapContainerRef.current.style.cursor = 'crosshair';
-      } else {
-        mapInstanceRef.current.dragging.enable();
-        if (mapContainerRef.current) mapContainerRef.current.style.cursor = '';
-      }
-    }
-  }, [isDrawingBBox]);
+  const [filters, setFilters] = useState({
+    dateWindow: '30d',
+    region: 'All',
+    statuses: ['active', 'under_ice', 'silent', 'recovered'],
+    dataMode: 'all',
+    minDepth: 0,
+    maxDepth: 500,
+    bbox: null,
+  });
 
   const resetFilters = () => {
     setFilters({
@@ -128,58 +122,29 @@ export default function FleetPage() {
       markersGroupRef.current = markersGroup;
       mapInstanceRef.current = map;
 
-      // Click / Drag Bounding Box event using ref to prevent stale closures
+      // Click / Drag Bounding Box event
       let startLatLng = null;
-      let tempPreviewRect = null;
-
       map.on('mousedown', (e) => {
-        if (!isDrawingBBoxRef.current) return;
-        startLatLng = e.latlng;
+        if (isDrawingBBox) startLatLng = e.latlng;
       });
-
-      map.on('mousemove', (e) => {
-        if (!isDrawingBBoxRef.current || !startLatLng) return;
-        const bounds = L.latLngBounds(startLatLng, e.latlng);
-        if (tempPreviewRect) {
-          tempPreviewRect.setBounds(bounds);
-        } else {
-          tempPreviewRect = L.rectangle(bounds, {
-            color: '#0E7C8B',
-            weight: 2,
-            fillOpacity: 0.15,
-            dashArray: '4, 4',
-          }).addTo(map);
-        }
-      });
-
       map.on('mouseup', (e) => {
-        if (!isDrawingBBoxRef.current || !startLatLng) return;
-        if (tempPreviewRect) {
-          tempPreviewRect.remove();
-          tempPreviewRect = null;
+        if (isDrawingBBox && startLatLng) {
+          const bounds = L.latLngBounds(startLatLng, e.latlng);
+          setFilters((prev) => ({
+            ...prev,
+            bbox: {
+              minLat: bounds.getSouth(),
+              maxLat: bounds.getNorth(),
+              minLon: bounds.getWest(),
+              maxLon: bounds.getEast(),
+            },
+          }));
+          setIsDrawingBBox(false);
+          startLatLng = null;
         }
-        const bounds = L.latLngBounds(startLatLng, e.latlng);
-        setFilters((prev) => ({
-          ...prev,
-          bbox: {
-            minLat: Math.min(bounds.getSouth(), bounds.getNorth()),
-            maxLat: Math.max(bounds.getSouth(), bounds.getNorth()),
-            minLon: Math.min(bounds.getWest(), bounds.getEast()),
-            maxLon: Math.max(bounds.getWest(), bounds.getEast()),
-          },
-        }));
-        setIsDrawingBBox(false);
-        startLatLng = null;
       });
     }
-
-    return () => {
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
-        mapInstanceRef.current = null;
-      }
-    };
-  }, []);
+  }, [isDrawingBBox]);
 
   // Update Markers & Trajectories when filteredFloats changes
   useEffect(() => {

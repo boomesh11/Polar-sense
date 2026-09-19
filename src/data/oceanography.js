@@ -165,13 +165,13 @@ export function generateNetCDFAscii(selectedFloats) {
   text += `\tfloat PRES(N_PROF, N_LEVELS) ;\n\t\tPRES:units = "decibar" ;\n`;
   text += `\tfloat TEMP(N_PROF, N_LEVELS) ;\n\t\tTEMP:units = "degree_Celsius" ;\n`;
   text += `\tfloat PSAL(N_PROF, N_LEVELS) ;\n\t\tPSAL:units = "psu" ;\n\n`;
-  text += `// global attributes:
-		:title = "PolarSense Autonomous Ice-Aware Profiling Float Telemetry (PS 26065)" ;
-		:institution = "Ministry of Earth Sciences (MoES) / National Centre for Polar and Ocean Research (NCPOR) · Team AQUA LEAGUE" ;
-		:source = "Autonomous 450m/500m Polar Profiling Floats (v3.0 Baseline)" ;
-		:references = "https://github.com/boomesh11/Polar-sense" ;
-		:comment = "Physical profiles collected with RBRlegato4 / SBE-41CP CTD sensors with dual-range sonar ice-risk verification." ;
-		:date_created = "${new Date().toISOString()}" ;\n`;
+  text += `// global attributes:\n`;
+  text += `\t\t:title = "PolarSense Autonomous Float Array Profile Telemetry" ;\n`;
+  text += `\t\t:institution = "PolarSense Oceanographic Observation Programme" ;\n`;
+  text += `\t\t:source = "Autonomous 500m Profiling Floats" ;\n`;
+  text += `\t\t:references = "http://polarsense.ocean/data-management" ;\n`;
+  text += `\t\t:comment = "Physical profiles collected with RBRlegato4-class CTD sensors." ;\n`;
+  text += `\t\t:date_created = "${new Date().toISOString()}" ;\n`;
   text += `data:\n\n`;
   text += `// Sample float arrays included in active selection\n`;
   selectedFloats.slice(0, 3).forEach((f) => {

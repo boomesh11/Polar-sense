@@ -43,7 +43,7 @@ export default function TabTrajectory({ float }) {
       // Uncertainty circle for dead reckoned under-ice positions
       if (pt.estimated || pt.uncertaintyKm > 0.5) {
         L.circle(latlng, {
-          radius: (pt.uncertaintyKm || 2.0) * 1000,
+          radius: (pt.uncertaintyKm || 2.6) * 1000,
           color: '#D97706',
           fillColor: '#D97706',
           fillOpacity: 0.15,
@@ -93,7 +93,7 @@ export default function TabTrajectory({ float }) {
             weight: 2.5,
             dashArray: isCurrentEstimated ? '6, 6' : undefined,
             opacity: 0.85
-          }).addTo(map);
+          }).addTo(group);
         }
         currentSegment = [latlng];
         isCurrentEstimated = pt.estimated;
@@ -154,7 +154,7 @@ export default function TabTrajectory({ float }) {
         <div style={{ padding: '10px 20px', background: '#FAFAF9', borderTop: '1px solid var(--border-color)', fontSize: '12px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Info size={14} color="var(--accent-teal)" />
           <span>
-            <em>Dashed segments are estimated. Under-ice positions represent cycle-averaged drift displacement with uncertainty bounds (PolarSense Spec §24.1).</em>
+            <em>Dashed segments are estimated. Under-ice positions carry a 2.6 km median uncertainty based on 500m bathymetry/geostrophic current integration.</em>
           </span>
         </div>
       </div>

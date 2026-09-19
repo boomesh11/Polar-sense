@@ -78,35 +78,15 @@ export default function TabRaw({ float }) {
       <div className="panel" style={{ marginBottom: '20px' }}>
         <div className="panel-header">
           <div>
-            <span className="section-heading" style={{ margin: 0 }}>Raw Iridium SBD Telemetry Frame (340 Bytes, §23.3)</span>
+            <span className="section-heading" style={{ margin: 0 }}>Raw Iridium SBD Telemetry Frame (340 Bytes)</span>
             <div className="text-secondary" style={{ fontSize: '11px', marginTop: '2px' }}>
-              Standard SIM-less Iridium 9603 SBD uplink envelope · 340 B uplink max · 270 B downlink max
+              Header: <code>0x01 [WMO ID] [Cycle] [CheckSum]</code> · Payload: CTD 16-bit compressed words
             </div>
           </div>
           <button className="btn" onClick={handleCopyHex} style={{ fontSize: '11px', padding: '4px 8px' }}>
             {copied ? <Check size={12} color="var(--success-green)" /> : <Code2 size={12} />}
             {copied ? 'Copied Hex' : 'Copy Hex Payload'}
           </button>
-        </div>
-
-        {/* 340-byte Frame Envelope Visualizer */}
-        <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 90px 120px', gap: '8px', marginBottom: '12px', fontSize: '11px' }}>
-          <div style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', padding: '6px 8px', borderRadius: '3px' }}>
-            <div style={{ fontWeight: 600, color: '#1D4ED8' }}>Header (24 B)</div>
-            <div style={{ color: '#64748B', fontSize: '10px' }}>Format, ID, SeqNo</div>
-          </div>
-          <div style={{ background: '#ECFDF5', border: '1px solid #A7F3D0', padding: '6px 8px', borderRadius: '3px' }}>
-            <div style={{ fontWeight: 600, color: '#047857' }}>Science / Health Payload (300 B)</div>
-            <div style={{ color: '#64748B', fontSize: '10px' }}>Up to 37 levels × 8 B per level (P, T, S, QC)</div>
-          </div>
-          <div style={{ background: '#FFFBEB', border: '1px solid #FDE68A', padding: '6px 8px', borderRadius: '3px' }}>
-            <div style={{ fontWeight: 600, color: '#B45309' }}>CRC32 (4 B)</div>
-            <div style={{ color: '#64748B', fontSize: '10px' }}>Bitflip check</div>
-          </div>
-          <div style={{ background: '#FDF2F8', border: '1px solid #FBCFE8', padding: '6px 8px', borderRadius: '3px' }}>
-            <div style={{ fontWeight: 600, color: '#BE185D' }}>Auth Tag (12 B)</div>
-            <div style={{ color: '#64748B', fontSize: '10px' }}>HMAC-SHA256</div>
-          </div>
         </div>
 
         <div className="hex-dump">{formattedHex}</div>

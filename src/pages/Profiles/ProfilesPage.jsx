@@ -65,41 +65,28 @@ export default function ProfilesPage() {
     if (!selectedProfiles.length) return [];
 
     const activeList = allProfilesList.filter((p) => selectedProfiles.includes(p.key));
+    const depthLevels = [5, 25, 50, 75, 100, 150, 200, 250, 300, 350, 400, 450, 500];
 
-    if (axisMode === 'depth') {
-      const depthLevels = [5, 25, 50, 75, 100, 150, 200, 250, 300, 350, 400, 450, 500];
-      return depthLevels.map((d) => {
-        const row = { yVal: d, depth: d };
-        activeList.forEach((prof) => {
-          const match = prof.levels.reduce((prev, curr) => {
-            return Math.abs(curr.pres - d) < Math.abs(prev.pres - d) ? curr : prev;
-          }, prof.levels[0]);
+    return depthLevels.map((d) => {
+      const row = { depth: d };
+      activeList.forEach((prof) => {
+        const match = prof.levels.reduce((prev, curr) => {
+          return Math.abs(curr.pres - d) < Math.abs(prev.pres - d) ? curr : prev;
+        }, prof.levels[0]);
 
-          if (match) {
+        if (match) {
+          if (axisMode === 'depth') {
             row[prof.key] = match[paramFilter] ?? null;
-          }
-        });
-        return row;
-      });
-    } else {
-      // Plot against potential density anomaly sigma_theta (isopycnal coordinate)
-      const densityLevels = [25.0, 25.5, 26.0, 26.5, 27.0, 27.2, 27.4, 27.6, 27.8, 28.0];
-      return densityLevels.map((sigma) => {
-        const row = { yVal: sigma, density: sigma };
-        activeList.forEach((prof) => {
-          const match = prof.levels.reduce((prev, curr) => {
-            const sCurr = calculateSigmaTheta(curr.psal, curr.temp);
-            const sPrev = calculateSigmaTheta(prev.psal, prev.temp);
-            return Math.abs(sCurr - sigma) < Math.abs(sPrev - sigma) ? curr : prev;
-          }, prof.levels[0]);
-
-          if (match) {
+          } else {
+            // Plot against density: X=param, Y=sigma_theta
+            const sigma = calculateSigmaTheta(match.psal, match.temp);
             row[prof.key] = match[paramFilter] ?? null;
+            row[`${prof.key}_sigma`] = sigma;
           }
-        });
-        return row;
+        }
       });
-    }
+      return row;
+    });
   }, [selectedProfiles, allProfilesList, paramFilter, axisMode]);
 
   const colors = ['#0E7C8B', '#D97706', '#516B84', '#1E7A4D', '#9B51E0', '#B3261E', '#4B5563'];
@@ -156,7 +143,7 @@ export default function ProfilesPage() {
                 Superimposed Comparison ({selectedProfiles.length} Selected Profiles)
               </span>
               <div className="text-secondary" style={{ fontSize: '11px', marginTop: '2px' }}>
-                Comparing {paramFilter.toUpperCase()} across {axisMode === 'depth' ? 'depth (dbar, inverted)' : 'potential density isopycnals σθ (kg/m³, inverted)'}.
+                Comparing {paramFilter.toUpperCase()} across {axisMode === 'depth' ? 'depth (dbar, inverted)' : 'potential density σθ'}.
               </div>
             </div>
 
@@ -185,19 +172,13 @@ export default function ProfilesPage() {
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="#E4E7EA" />
                 <YAxis
-                  dataKey="yVal"
+                  dataKey="depth"
                   type="number"
-                  domain={axisMode === 'depth' ? [0, 520] : [24.5, 28.5]}
+                  domain={[0, 520]}
                   reversed={true}
-                  unit={axisMode === 'depth' ? ' dbar' : ' kg/m³'}
+                  unit=" dbar"
                   tick={{ fontSize: 11, fill: '#5A6B78' }}
-                  label={{
-                    value: axisMode === 'depth' ? 'Pressure (dbar)' : 'Potential Density σθ (kg/m³)',
-                    angle: -90,
-                    position: 'insideLeft',
-                    offset: -2,
-                    style: { fontSize: 11, fill: '#5A6B78' }
-                  }}
+                  label={{ value: axisMode === 'depth' ? 'Pressure (dbar)' : 'Depth Equivalent (dbar)', angle: -90, position: 'insideLeft', offset: -2, style: { fontSize: 11, fill: '#5A6B78' } }}
                 />
                 <XAxis
                   type="number"
@@ -212,7 +193,7 @@ export default function ProfilesPage() {
                       return (
                         <div className="panel" style={{ padding: '8px 12px', fontSize: '12px' }}>
                           <div style={{ fontWeight: 600, borderBottom: '1px solid var(--border-light)', paddingBottom: '4px' }}>
-                            {axisMode === 'depth' ? `Depth: ${d.yVal} dbar` : `Density σθ: ${d.yVal} kg/m³`}
+                            Depth: {d.depth} dbar
                           </div>
                           {payload.map((entry, idx) => (
                             <div key={idx} style={{ color: entry.color, marginTop: '3px' }}>

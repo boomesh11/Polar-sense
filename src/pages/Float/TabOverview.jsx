@@ -74,40 +74,39 @@ export default function TabOverview({ float }) {
 
         <div className="col-4 panel">
           <div className="panel-header">
-            <span className="section-heading" style={{ margin: 0 }}>Power & 24-Cell Pack (§19–20)</span>
-            <span className="tabular-nums text-mono">{float.battery}% ({(919 * (float.battery / 100)).toFixed(0)} Wh)</span>
+            <span className="section-heading" style={{ margin: 0 }}>Battery & Power Trend</span>
+            <span className="tabular-nums text-mono">{float.battery}%</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
               <div className="stat-val-large">{float.health?.packVoltage?.toFixed(1) || '10.8'}<span className="stat-unit">V</span></div>
-              <div className="text-secondary" style={{ fontSize: '11px', marginTop: '2px' }}>24 × Li-SOCl₂ D Cells (3S8P)</div>
-              <div style={{ fontSize: '10px', color: '#64748B', marginTop: '3px' }}>1,123 Wh nameplate · 36 Wh reserve</div>
+              <div className="text-secondary" style={{ fontSize: '11px' }}>Pack Lithium Thionyl Chloride</div>
             </div>
             <div>
               <Sparkline data={batteryData} width={100} height={32} color="var(--accent-teal)" type="trend" />
-              <div className="text-muted text-mono" style={{ fontSize: '10px', textAlign: 'right', marginTop: '2px' }}>5.30 Wh/cycle</div>
+              <div className="text-muted text-mono" style={{ fontSize: '10px', textAlign: 'right', marginTop: '2px' }}>6-cycle discharge</div>
             </div>
           </div>
         </div>
 
-        <div className="col-4 panel" style={{ borderLeft: float.iceAborts > 0 ? '3px solid var(--alert-amber)' : '3px solid var(--success-green)' }}>
+        <div className="col-4 panel" style={{ borderLeft: float.iceAborts > 0 ? '3px solid var(--alert-amber)' : '1px solid var(--border-color)' }}>
           <div className="panel-header">
             <span className="section-heading" style={{ margin: 0, color: float.iceAborts > 0 ? 'var(--alert-amber)' : 'var(--accent-teal)' }}>
-              3-State Ice-Risk Engine (§15)
+              Ice-Abort Telemetry
             </span>
-            <ShieldAlert size={16} color={float.iceAborts > 0 ? 'var(--alert-amber)' : 'var(--success-green)'} />
+            <ShieldAlert size={16} color={float.iceAborts > 0 ? 'var(--alert-amber)' : 'var(--text-secondary)'} />
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-            <span className="stat-val-large" style={{ color: float.iceAborts > 0 ? 'var(--alert-amber)' : 'var(--success-green)' }}>
-              {float.iceAborts > 0 ? 'BLOCKED' : 'CLEAR'}
+            <span className="stat-val-large" style={{ color: float.iceAborts > 0 ? 'var(--alert-amber)' : 'var(--text-primary)' }}>
+              {float.iceAborts}
             </span>
-            <span className="text-secondary" style={{ fontSize: '11px' }}>
-              ({float.iceAborts} aborts · 0 unsafe clears)
-            </span>
+            <span className="text-secondary">aborts detected ({((float.iceAborts / (float.cyclesCompleted || 1)) * 100).toFixed(0)}% abort rate)</span>
           </div>
-          <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '6px', lineHeight: 1.4 }}>
-            Dual Sonar (2–60m / 0.05–5m) &amp; Thermal Veto (ΔT &le; 0.5°C freezing). 10 consecutive valid clear pings required.
-          </div>
+          <p style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '8px' }}>
+            {float.iceAborts > 0
+              ? 'Thermistor ice-sensing suspended ascent at 45m. Profiles cached in on-board flash.'
+              : 'Zero ice encounters. All ascents surfaced nominally for GPS/Iridium link.'}
+          </p>
         </div>
       </div>
 
@@ -214,72 +213,50 @@ export default function TabOverview({ float }) {
 
       {/* Health Strip */}
       <div className="panel">
-        <span className="section-heading">Instrument Health Diagnostics (v3.0 Architecture)</span>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '12px', marginTop: '12px' }}>
+        <span className="section-heading">Instrument Health Diagnostics</span>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginTop: '12px' }}>
           <div style={{ padding: '10px', background: '#FAFAF9', borderRadius: '4px', border: '1px solid var(--border-light)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)', fontSize: '10px' }}>
-              <Droplets size={13} color={float.health?.humidity > 60 ? 'var(--alert-amber)' : 'var(--text-secondary)'} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)', fontSize: '11px' }}>
+              <Droplets size={14} color={float.health?.humidity > 60 ? 'var(--alert-amber)' : 'var(--text-secondary)'} />
               INTERNAL HUMIDITY
             </div>
-            <div className="stat-val-large" style={{ fontSize: '18px', marginTop: '4px', color: float.health?.humidity > 60 ? 'var(--alert-amber)' : 'var(--text-primary)' }}>
+            <div className="stat-val-large" style={{ fontSize: '20px', marginTop: '4px', color: float.health?.humidity > 60 ? 'var(--alert-amber)' : 'var(--text-primary)' }}>
               {float.health?.humidity || 30}%
             </div>
-            <div className="text-secondary" style={{ fontSize: '10px' }}>Nominal &lt; 50% RH</div>
+            <div className="text-secondary" style={{ fontSize: '11px' }}>Nominal &lt; 50% RH</div>
           </div>
 
           <div style={{ padding: '10px', background: '#FAFAF9', borderRadius: '4px', border: '1px solid var(--border-light)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)', fontSize: '10px' }}>
-              <Zap size={13} color="var(--accent-teal)" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)', fontSize: '11px' }}>
+              <Zap size={14} color="var(--accent-teal)" />
               PACK VOLTAGE
             </div>
-            <div className="stat-val-large" style={{ fontSize: '18px', marginTop: '4px' }}>
+            <div className="stat-val-large" style={{ fontSize: '20px', marginTop: '4px' }}>
               {float.health?.packVoltage?.toFixed(1) || '10.8'} V
             </div>
-            <div className="text-secondary" style={{ fontSize: '10px' }}>3S8P (24 D Cells)</div>
+            <div className="text-secondary" style={{ fontSize: '11px' }}>Cutoff limit: 7.2 V</div>
           </div>
 
           <div style={{ padding: '10px', background: '#FAFAF9', borderRadius: '4px', border: '1px solid var(--border-light)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)', fontSize: '10px' }}>
-              <Gauge size={13} color="var(--accent-teal)" />
-              BUOYANCY STROKE
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)', fontSize: '11px' }}>
+              <Gauge size={14} color="var(--text-secondary)" />
+              HYDRAULIC PUMP CYCLES
             </div>
-            <div className="stat-val-large" style={{ fontSize: '18px', marginTop: '4px' }}>
-              650 ml
-            </div>
-            <div className="text-secondary" style={{ fontSize: '10px' }}>±100g Auth (§11)</div>
-          </div>
-
-          <div style={{ padding: '10px', background: '#FAFAF9', borderRadius: '4px', border: '1px solid var(--border-light)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)', fontSize: '10px' }}>
-              <Gauge size={13} color="var(--text-secondary)" />
-              NORMAL PARK DEPTH
-            </div>
-            <div className="stat-val-large" style={{ fontSize: '18px', marginTop: '4px' }}>
-              450 m
-            </div>
-            <div className="text-secondary" style={{ fontSize: '10px' }}>500 m Max Ceiling</div>
-          </div>
-
-          <div style={{ padding: '10px', background: '#FAFAF9', borderRadius: '4px', border: '1px solid var(--border-light)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)', fontSize: '10px' }}>
-              <Gauge size={13} color="var(--text-secondary)" />
-              PUMP CYCLES
-            </div>
-            <div className="stat-val-large" style={{ fontSize: '18px', marginTop: '4px' }}>
+            <div className="stat-val-large" style={{ fontSize: '20px', marginTop: '4px' }}>
               {float.health?.pumpCycles || 142}
             </div>
-            <div className="text-secondary" style={{ fontSize: '10px' }}>Latching Valve 0 mA</div>
+            <div className="text-secondary" style={{ fontSize: '11px' }}>MTBF limit: 2,500</div>
           </div>
 
           <div style={{ padding: '10px', background: '#FAFAF9', borderRadius: '4px', border: '1px solid var(--border-light)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)', fontSize: '10px' }}>
-              <HardDrive size={13} color="var(--text-secondary)" />
-              FLASH BUFFER
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)', fontSize: '11px' }}>
+              <HardDrive size={14} color="var(--text-secondary)" />
+              FLASH BUFFER USED
             </div>
-            <div className="stat-val-large" style={{ fontSize: '18px', marginTop: '4px' }}>
+            <div className="stat-val-large" style={{ fontSize: '20px', marginTop: '4px' }}>
               {float.health?.flashUsedPct || 22}%
             </div>
-            <div className="text-secondary" style={{ fontSize: '10px' }}>128 MB Safe NOR</div>
+            <div className="text-secondary" style={{ fontSize: '11px' }}>Capacity: 128 MB NOR</div>
           </div>
         </div>
       </div>

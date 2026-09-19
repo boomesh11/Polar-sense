@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { X, Radio } from 'lucide-react';
 
 const STATE_COLORS = {
@@ -139,21 +138,18 @@ export default function FloatSidePanel({ float: f, onClose }) {
           <RowKV label="Last Contact" value={lastContactDate ? lastContactDate.toLocaleString() : '—'} />
           <RowKV label="Cycles"       value={f.cyclesCompleted} mono />
           <RowKV label="Current Depth" value={`${(f.currentDepth ?? 0).toFixed(0)} m`} mono />
-          <RowKV label="Normal Park"   value="450 m (500m max)" mono />
-          <RowKV label="Buoyancy Stroke" value="650 ml (±100g)" mono />
+          <RowKV label="Target Depth"  value={`${f.targetDepth ?? 500} m`} mono />
           <RowKV label="Ice Aborts"    value={f.iceAborts ?? 0} mono />
         </div>
 
         {/* Battery */}
         <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#0E7C8B', marginBottom: 6 }}>Power Architecture</div>
+          <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#0E7C8B', marginBottom: 6 }}>Power</div>
           <div style={{ marginBottom: 4 }}>
-            <div style={{ fontSize: 11, color: '#5A6B78', marginBottom: 3 }}>24-Cell 3S8P Pack</div>
+            <div style={{ fontSize: 11, color: '#5A6B78', marginBottom: 3 }}>Battery</div>
             <BatteryBar pct={f.battery ?? 0} />
           </div>
-          <RowKV label="Pack Voltage"   value={f.health?.packVoltage != null ? `${f.health.packVoltage} V` : '10.8 V'} mono />
-          <RowKV label="Nameplate"      value="1123 Wh (104 Ah)" mono />
-          <RowKV label="Cycle Budget"   value="5.30 Wh (Open)" mono />
+          <RowKV label="Pack Voltage"   value={f.health?.packVoltage != null ? `${f.health.packVoltage} V` : '—'} mono />
           <RowKV label="Internal Temp"  value={f.health?.internalTemp != null ? `${f.health.internalTemp} °C` : '—'} mono />
           <RowKV label="Humidity"       value={f.health?.humidity != null ? `${f.health.humidity}%` : '—'} mono />
           {f.health?.warning && (
@@ -204,12 +200,12 @@ export default function FloatSidePanel({ float: f, onClose }) {
 
       {/* Footer */}
       <div style={{ padding: '10px 16px', borderTop: '1px solid var(--border-color)', background: '#FAFAF9' }}>
-        <Link
-          to={`/float/${f.id}`}
+        <a
+          href={`/float/${f.id}`}
           style={{ color: '#0E7C8B', textDecoration: 'none', fontWeight: 600, fontSize: 13, display: 'flex', alignItems: 'center', gap: 6 }}
         >
-          View full instrument details &rarr;
-        </Link>
+          View full profile &rarr;
+        </a>
       </div>
     </div>
   );

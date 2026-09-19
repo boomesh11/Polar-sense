@@ -95,7 +95,7 @@ export default function FloatPage() {
               <StatusPill status={float.status} />
             </div>
             <div className="text-mono text-secondary" style={{ fontSize: '13px', marginTop: '3px' }}>
-              WMO {float.wmo} · SBE-41CP CTD #8842
+              WMO {float.wmo} · RBRlegato4-class CTD
             </div>
           </div>
 
