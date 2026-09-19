@@ -1,0 +1,335 @@
+[
+  {
+    "id": "PS-001",
+    "wmo": "2903881",
+    "status": "active",
+    "region": "Southern Ocean",
+    "deployed": "2026-03-14",
+    "lastContact": "2026-08-26T08:12:00Z",
+    "battery": 84,
+    "cyclesCompleted": 14,
+    "iceAborts": 3,
+    "position": { "lat": -58.42, "lon": 42.19, "fixQuality": "gps", "uncertaintyKm": 0 },
+    "missionState": "DRIFTING",
+    "targetDepth": 500,
+    "currentDepth": 498.2,
+    "trajectory": [
+      { "cycle": 1, "lat": -56.80, "lon": 38.10, "timestamp": "2026-03-15T04:00:00Z", "estimated": false, "uncertaintyKm": 0.05, "fixQuality": "gps" },
+      { "cycle": 3, "lat": -57.10, "lon": 39.00, "timestamp": "2026-04-04T06:00:00Z", "estimated": false, "uncertaintyKm": 0.05, "fixQuality": "gps" },
+      { "cycle": 6, "lat": -57.55, "lon": 40.20, "timestamp": "2026-05-04T12:00:00Z", "estimated": false, "uncertaintyKm": 0.05, "fixQuality": "gps" },
+      { "cycle": 9, "lat": -57.90, "lon": 40.95, "timestamp": "2026-06-03T18:00:00Z", "estimated": true, "uncertaintyKm": 2.4, "fixQuality": "dead_reckoned" },
+      { "cycle": 11, "lat": -58.12, "lon": 41.50, "timestamp": "2026-07-03T02:00:00Z", "estimated": true, "uncertaintyKm": 2.7, "fixQuality": "dead_reckoned" },
+      { "cycle": 13, "lat": -58.30, "lon": 41.90, "timestamp": "2026-08-02T10:00:00Z", "estimated": false, "uncertaintyKm": 0.08, "fixQuality": "gps" },
+      { "cycle": 14, "lat": -58.42, "lon": 42.19, "timestamp": "2026-08-26T08:12:00Z", "estimated": false, "uncertaintyKm": 0.05, "fixQuality": "gps" }
+    ],
+    "profiles": [
+      {
+        "cycle": 14,
+        "timestamp": "2026-08-26T07:45:00Z",
+        "dataMode": "R",
+        "aborted": false,
+        "levels": [
+          { "pres": 4.2, "temp": -0.85, "psal": 33.88, "doxy": 320.4, "qc": 1 },
+          { "pres": 15.0, "temp": -0.92, "psal": 33.91, "doxy": 319.8, "qc": 1 },
+          { "pres": 30.0, "temp": -1.15, "psal": 33.94, "doxy": 318.0, "qc": 1 },
+          { "pres": 50.0, "temp": -1.45, "psal": 34.02, "doxy": 315.2, "qc": 1 },
+          { "pres": 75.0, "temp": -1.68, "psal": 34.15, "doxy": 308.1, "qc": 1 },
+          { "pres": 100.0, "temp": -1.72, "psal": 34.28, "doxy": 298.5, "qc": 1 },
+          { "pres": 150.0, "temp": -0.45, "psal": 34.48, "doxy": 275.4, "qc": 1 },
+          { "pres": 200.0, "temp": 0.82, "psal": 34.62, "doxy": 252.0, "qc": 1 },
+          { "pres": 250.0, "temp": 1.34, "psal": 34.69, "doxy": 240.1, "qc": 1 },
+          { "pres": 300.0, "temp": 1.58, "psal": 34.73, "doxy": 234.8, "qc": 1 },
+          { "pres": 350.0, "temp": 1.65, "psal": 34.75, "doxy": 232.0, "qc": 1 },
+          { "pres": 400.0, "temp": 1.62, "psal": 34.76, "doxy": 230.5, "qc": 1 },
+          { "pres": 450.0, "temp": 1.55, "psal": 34.76, "doxy": 229.8, "qc": 1 },
+          { "pres": 498.2, "temp": 1.48, "psal": 34.77, "doxy": 228.4, "qc": 1 }
+        ]
+      },
+      {
+        "cycle": 13,
+        "timestamp": "2026-08-16T08:00:00Z",
+        "dataMode": "R",
+        "aborted": false,
+        "levels": [
+          { "pres": 5.0, "temp": -0.65, "psal": 33.85, "doxy": 322.0, "qc": 1 },
+          { "pres": 25.0, "temp": -0.80, "psal": 33.90, "doxy": 320.1, "qc": 1 },
+          { "pres": 60.0, "temp": -1.35, "psal": 34.08, "doxy": 312.0, "qc": 1 },
+          { "pres": 120.0, "temp": -1.50, "psal": 34.35, "doxy": 288.4, "qc": 1 },
+          { "pres": 200.0, "temp": 0.75, "psal": 34.60, "doxy": 254.2, "qc": 1 },
+          { "pres": 320.0, "temp": 1.60, "psal": 34.74, "doxy": 233.1, "qc": 1 },
+          { "pres": 495.0, "temp": 1.45, "psal": 34.77, "doxy": 229.0, "qc": 1 }
+        ]
+      },
+      {
+        "cycle": 12,
+        "timestamp": "2026-08-06T09:10:00Z",
+        "dataMode": "R",
+        "aborted": true,
+        "levels": [
+          { "pres": 35.0, "temp": -1.55, "psal": 34.00, "doxy": 316.0, "qc": 1 },
+          { "pres": 100.0, "temp": -1.70, "psal": 34.25, "doxy": 299.0, "qc": 1 },
+          { "pres": 250.0, "temp": 1.25, "psal": 34.68, "doxy": 242.0, "qc": 1 },
+          { "pres": 490.0, "temp": 1.50, "psal": 34.76, "doxy": 230.0, "qc": 1 }
+        ]
+      },
+      {
+        "cycle": 11,
+        "timestamp": "2026-07-27T07:30:00Z",
+        "dataMode": "R",
+        "aborted": false,
+        "levels": [
+          { "pres": 4.5, "temp": -0.40, "psal": 33.82, "doxy": 324.0, "qc": 1 },
+          { "pres": 50.0, "temp": -1.20, "psal": 33.98, "doxy": 317.0, "qc": 1 },
+          { "pres": 150.0, "temp": -0.20, "psal": 34.45, "doxy": 278.0, "qc": 1 },
+          { "pres": 300.0, "temp": 1.52, "psal": 34.72, "doxy": 235.0, "qc": 1 },
+          { "pres": 500.0, "temp": 1.46, "psal": 34.77, "doxy": 228.0, "qc": 1 }
+        ]
+      }
+    ],
+    "health": {
+      "humidity": 31,
+      "packVoltage": 10.8,
+      "flashUsedPct": 22,
+      "pumpCycles": 142,
+      "internalTemp": 4.2,
+      "vacuumDbar": 9.4
+    }
+  },
+  {
+    "id": "PS-002",
+    "wmo": "2903882",
+    "status": "under_ice",
+    "region": "Southern Ocean",
+    "deployed": "2026-02-10",
+    "lastContact": "2026-08-26T04:10:00Z",
+    "battery": 76,
+    "cyclesCompleted": 19,
+    "iceAborts": 7,
+    "position": { "lat": -66.15, "lon": 168.45, "fixQuality": "dead_reckoned", "uncertaintyKm": 2.8 },
+    "missionState": "ICE_CHECK",
+    "targetDepth": 500,
+    "currentDepth": 45.0,
+    "trajectory": [
+      { "cycle": 1, "lat": -63.20, "lon": 162.10, "timestamp": "2026-02-12T00:00:00Z", "estimated": false, "uncertaintyKm": 0.05, "fixQuality": "gps" },
+      { "cycle": 5, "lat": -64.10, "lon": 164.30, "timestamp": "2026-03-24T00:00:00Z", "estimated": false, "uncertaintyKm": 0.05, "fixQuality": "gps" },
+      { "cycle": 10, "lat": -64.95, "lon": 165.80, "timestamp": "2026-05-13T00:00:00Z", "estimated": true, "uncertaintyKm": 1.8, "fixQuality": "dead_reckoned" },
+      { "cycle": 14, "lat": -65.50, "lon": 167.10, "timestamp": "2026-06-22T00:00:00Z", "estimated": true, "uncertaintyKm": 2.2, "fixQuality": "dead_reckoned" },
+      { "cycle": 17, "lat": -65.90, "lon": 167.95, "timestamp": "2026-07-22T00:00:00Z", "estimated": true, "uncertaintyKm": 2.6, "fixQuality": "dead_reckoned" },
+      { "cycle": 19, "lat": -66.15, "lon": 168.45, "timestamp": "2026-08-26T04:10:00Z", "estimated": true, "uncertaintyKm": 2.8, "fixQuality": "dead_reckoned" }
+    ],
+    "profiles": [
+      {
+        "cycle": 19,
+        "timestamp": "2026-08-26T03:50:00Z",
+        "dataMode": "R",
+        "aborted": true,
+        "levels": [
+          { "pres": 45.0, "temp": -1.82, "psal": 34.12, "doxy": 328.0, "qc": 1 },
+          { "pres": 80.0, "temp": -1.85, "psal": 34.25, "doxy": 320.0, "qc": 1 },
+          { "pres": 160.0, "temp": -0.95, "psal": 34.52, "doxy": 290.0, "qc": 1 },
+          { "pres": 280.0, "temp": 0.45, "psal": 34.68, "doxy": 255.0, "qc": 1 },
+          { "pres": 400.0, "temp": 1.10, "psal": 34.74, "doxy": 238.0, "qc": 1 },
+          { "pres": 485.0, "temp": 1.22, "psal": 34.76, "doxy": 232.0, "qc": 1 }
+        ]
+      },
+      {
+        "cycle": 18,
+        "timestamp": "2026-08-16T03:30:00Z",
+        "dataMode": "R",
+        "aborted": true,
+        "levels": [
+          { "pres": 42.0, "temp": -1.80, "psal": 34.10, "doxy": 329.0, "qc": 1 },
+          { "pres": 120.0, "temp": -1.40, "psal": 34.40, "doxy": 302.0, "qc": 1 },
+          { "pres": 300.0, "temp": 0.60, "psal": 34.70, "doxy": 250.0, "qc": 1 },
+          { "pres": 488.0, "temp": 1.20, "psal": 34.76, "doxy": 233.0, "qc": 1 }
+        ]
+      }
+    ],
+    "health": {
+      "humidity": 34,
+      "packVoltage": 10.4,
+      "flashUsedPct": 61,
+      "pumpCycles": 198,
+      "internalTemp": -0.8,
+      "vacuumDbar": 9.2
+    }
+  },
+  {
+    "id": "PS-003",
+    "wmo": "2903883",
+    "status": "silent",
+    "region": "Arctic",
+    "deployed": "2025-11-04",
+    "lastContact": "2026-07-16T11:20:00Z",
+    "battery": 41,
+    "cyclesCompleted": 22,
+    "iceAborts": 1,
+    "position": { "lat": 79.15, "lon": -4.25, "fixQuality": "gps", "uncertaintyKm": 0.1 },
+    "missionState": "SILENT",
+    "targetDepth": 500,
+    "currentDepth": 500.0,
+    "trajectory": [
+      { "cycle": 1, "lat": 77.20, "lon": 2.10, "timestamp": "2025-11-06T00:00:00Z", "estimated": false, "uncertaintyKm": 0.05, "fixQuality": "gps" },
+      { "cycle": 10, "lat": 78.10, "lon": -0.80, "timestamp": "2026-02-14T00:00:00Z", "estimated": false, "uncertaintyKm": 0.05, "fixQuality": "gps" },
+      { "cycle": 22, "lat": 79.15, "lon": -4.25, "timestamp": "2026-07-16T11:20:00Z", "estimated": false, "uncertaintyKm": 0.1, "fixQuality": "gps" }
+    ],
+    "profiles": [
+      {
+        "cycle": 22,
+        "timestamp": "2026-07-16T10:45:00Z",
+        "dataMode": "D",
+        "aborted": false,
+        "levels": [
+          { "pres": 5.0, "temp": 1.25, "psal": 33.10, "doxy": 340.0, "qc": 1 },
+          { "pres": 25.0, "temp": -0.40, "psal": 33.65, "doxy": 335.0, "qc": 1 },
+          { "pres": 75.0, "temp": -1.35, "psal": 34.20, "doxy": 310.0, "qc": 1 },
+          { "pres": 150.0, "temp": 2.10, "psal": 34.85, "doxy": 280.0, "qc": 1 },
+          { "pres": 300.0, "temp": 1.85, "psal": 34.92, "doxy": 272.0, "qc": 1 },
+          { "pres": 500.0, "temp": 0.40, "psal": 34.90, "doxy": 268.0, "qc": 1 }
+        ]
+      }
+    ],
+    "health": {
+      "humidity": 39,
+      "packVoltage": 9.2,
+      "flashUsedPct": 48,
+      "pumpCycles": 235,
+      "internalTemp": 1.4,
+      "vacuumDbar": 8.9
+    }
+  },
+  {
+    "id": "PS-004",
+    "wmo": "2903884",
+    "status": "active",
+    "region": "Arctic",
+    "deployed": "2026-05-18",
+    "lastContact": "2026-08-26T06:50:00Z",
+    "battery": 91,
+    "cyclesCompleted": 9,
+    "iceAborts": 2,
+    "position": { "lat": 73.85, "lon": -144.20, "fixQuality": "gps", "uncertaintyKm": 0 },
+    "missionState": "ASCENDING",
+    "targetDepth": 500,
+    "currentDepth": 120.0,
+    "trajectory": [
+      { "cycle": 1, "lat": 73.10, "lon": -146.50, "timestamp": "2026-05-20T00:00:00Z", "estimated": false, "uncertaintyKm": 0.05, "fixQuality": "gps" },
+      { "cycle": 5, "lat": 73.45, "lon": -145.30, "timestamp": "2026-07-08T00:00:00Z", "estimated": false, "uncertaintyKm": 0.05, "fixQuality": "gps" },
+      { "cycle": 9, "lat": 73.85, "lon": -144.20, "timestamp": "2026-08-26T06:50:00Z", "estimated": false, "uncertaintyKm": 0.05, "fixQuality": "gps" }
+    ],
+    "profiles": [
+      {
+        "cycle": 9,
+        "timestamp": "2026-08-26T06:10:00Z",
+        "dataMode": "R",
+        "aborted": false,
+        "levels": [
+          { "pres": 4.0, "temp": 0.85, "psal": 29.50, "doxy": 350.0, "qc": 1 },
+          { "pres": 30.0, "temp": -1.40, "psal": 31.40, "doxy": 342.0, "qc": 1 },
+          { "pres": 80.0, "temp": -1.55, "psal": 32.85, "doxy": 325.0, "qc": 1 },
+          { "pres": 180.0, "temp": 0.45, "psal": 34.60, "doxy": 270.0, "qc": 1 },
+          { "pres": 350.0, "temp": 0.65, "psal": 34.82, "doxy": 262.0, "qc": 1 },
+          { "pres": 502.0, "temp": 0.15, "psal": 34.88, "doxy": 258.0, "qc": 1 }
+        ]
+      }
+    ],
+    "health": {
+      "humidity": 28,
+      "packVoltage": 11.2,
+      "flashUsedPct": 14,
+      "pumpCycles": 94,
+      "internalTemp": 3.6,
+      "vacuumDbar": 9.6
+    }
+  },
+  {
+    "id": "PS-005",
+    "wmo": "2903885",
+    "status": "active",
+    "region": "Coastal trials",
+    "deployed": "2026-01-20",
+    "lastContact": "2026-08-26T07:15:00Z",
+    "battery": 69,
+    "cyclesCompleted": 28,
+    "iceAborts": 0,
+    "position": { "lat": 64.25, "lon": 6.80, "fixQuality": "gps", "uncertaintyKm": 0 },
+    "missionState": "SURFACE",
+    "targetDepth": 500,
+    "currentDepth": 0.0,
+    "trajectory": [
+      { "cycle": 1, "lat": 63.40, "lon": 5.20, "timestamp": "2026-01-22T00:00:00Z", "estimated": false, "uncertaintyKm": 0.05, "fixQuality": "gps" },
+      { "cycle": 15, "lat": 63.85, "lon": 6.00, "timestamp": "2026-05-12T00:00:00Z", "estimated": false, "uncertaintyKm": 0.05, "fixQuality": "gps" },
+      { "cycle": 28, "lat": 64.25, "lon": 6.80, "timestamp": "2026-08-26T07:15:00Z", "estimated": false, "uncertaintyKm": 0.05, "fixQuality": "gps" }
+    ],
+    "profiles": [
+      {
+        "cycle": 28,
+        "timestamp": "2026-08-26T06:40:00Z",
+        "dataMode": "R",
+        "aborted": false,
+        "levels": [
+          { "pres": 3.0, "temp": 11.45, "psal": 34.10, "doxy": 280.0, "qc": 1 },
+          { "pres": 25.0, "temp": 10.80, "psal": 34.35, "doxy": 275.0, "qc": 1 },
+          { "pres": 60.0, "temp": 8.90, "psal": 34.80, "doxy": 260.0, "qc": 1 },
+          { "pres": 120.0, "temp": 7.45, "psal": 35.10, "doxy": 252.0, "qc": 1 },
+          { "pres": 250.0, "temp": 6.80, "psal": 35.20, "doxy": 248.0, "qc": 2 },
+          { "pres": 400.0, "temp": 5.90, "psal": 35.15, "doxy": 244.0, "qc": 2 },
+          { "pres": 495.0, "temp": 5.40, "psal": 35.10, "doxy": 240.0, "qc": 3 }
+        ]
+      }
+    ],
+    "health": {
+      "humidity": 68,
+      "packVoltage": 10.1,
+      "flashUsedPct": 38,
+      "pumpCycles": 298,
+      "internalTemp": 9.1,
+      "vacuumDbar": 8.4,
+      "warning": "Internal humidity rising (>65%). Possible slow seal ingress."
+    }
+  },
+  {
+    "id": "PS-006",
+    "wmo": "2903886",
+    "status": "recovered",
+    "region": "Southern Ocean",
+    "deployed": "2025-08-10",
+    "lastContact": "2026-06-30T14:00:00Z",
+    "battery": 32,
+    "cyclesCompleted": 35,
+    "iceAborts": 4,
+    "position": { "lat": -56.10, "lon": -64.40, "fixQuality": "gps", "uncertaintyKm": 0 },
+    "missionState": "RECOVERED",
+    "targetDepth": 500,
+    "currentDepth": 0.0,
+    "trajectory": [
+      { "cycle": 1, "lat": -58.20, "lon": -68.10, "timestamp": "2025-08-12T00:00:00Z", "estimated": false, "uncertaintyKm": 0.05, "fixQuality": "gps" },
+      { "cycle": 20, "lat": -57.40, "lon": -66.50, "timestamp": "2026-02-18T00:00:00Z", "estimated": false, "uncertaintyKm": 0.05, "fixQuality": "gps" },
+      { "cycle": 35, "lat": -56.10, "lon": -64.40, "timestamp": "2026-06-30T14:00:00Z", "estimated": false, "uncertaintyKm": 0.05, "fixQuality": "gps" }
+    ],
+    "profiles": [
+      {
+        "cycle": 35,
+        "timestamp": "2026-06-30T13:20:00Z",
+        "dataMode": "D",
+        "aborted": false,
+        "levels": [
+          { "pres": 4.0, "temp": 4.10, "psal": 34.05, "doxy": 305.0, "qc": 1 },
+          { "pres": 40.0, "temp": 3.80, "psal": 34.12, "doxy": 302.0, "qc": 1 },
+          { "pres": 100.0, "temp": 2.95, "psal": 34.30, "doxy": 288.0, "qc": 1 },
+          { "pres": 200.0, "temp": 2.60, "psal": 34.55, "doxy": 268.0, "qc": 1 },
+          { "pres": 350.0, "temp": 2.45, "psal": 34.68, "doxy": 252.0, "qc": 1 },
+          { "pres": 500.0, "temp": 2.10, "psal": 34.72, "doxy": 245.0, "qc": 1 }
+        ]
+      }
+    ],
+    "health": {
+      "humidity": 26,
+      "packVoltage": 8.9,
+      "flashUsedPct": 94,
+      "pumpCycles": 380,
+      "internalTemp": 5.0,
+      "vacuumDbar": 9.1
+    }
+  }
+]
